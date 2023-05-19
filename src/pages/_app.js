@@ -4,6 +4,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import ProgressBar from "@badrap/bar-of-progress";
 import Router from "next/router";
 import AuthProvider from "@/context/AuthContext";
+import { wrapper } from "@/redux/store";
 
 const lightTheme = createTheme({
 	type: "light",
@@ -44,4 +45,4 @@ function App({ Component, pageProps }) {
 	);
 }
 
-export default App;
+export default wrapper.withRedux(App);
