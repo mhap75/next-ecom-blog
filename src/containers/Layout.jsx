@@ -9,7 +9,7 @@ import { useTheme } from "@nextui-org/react";
 const Layout = ({ children }) => {
 	const { isDark } = useTheme()
 	const router = useRouter()
-	console.log(router.query);
+	
 	return (
 		<div className="grid grid-rows-[min-content_1fr_min-content] min-h-screen">
 			<Head>

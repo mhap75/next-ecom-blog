@@ -5,10 +5,6 @@ const Comment = ({ comment }) => {
 	const [showForm, setShowForm] = useState(false);
 	const date = new Date(comment.createdAt);
 	const options = { year: "numeric", month: "long", day: "numeric" };
-	const formattedDate = date
-		.toLocaleDateString("en-US", options)
-		.replace(/(\d{4}),(.*)/, "$1,$2");
-
 
 	return (
 		<Card css={{ p: "$2" }}>
@@ -25,7 +21,9 @@ const Comment = ({ comment }) => {
 					</Grid>
 					<Grid xs={12}>
 						<Text css={{ color: "$accents8", fontSize: "0.8rem" }}>
-							{formattedDate}
+							{new Intl.DateTimeFormat("en-US", options).format(
+								date
+							)}
 						</Text>
 					</Grid>
 				</Grid.Container>
@@ -40,7 +38,13 @@ const Comment = ({ comment }) => {
 				>
 					{!showForm ? "reply" : "cancel"}
 				</Button>
-				{showForm && <CommentForm setShowForm={setShowForm} postId={comment.postId} inquiryId={comment._id} />}
+				{showForm && (
+					<CommentForm
+						setShowForm={setShowForm}
+						postId={comment.postId}
+						inquiryId={comment._id}
+					/>
+				)}
 			</Card.Footer>
 		</Card>
 	);

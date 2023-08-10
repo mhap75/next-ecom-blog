@@ -1,10 +1,14 @@
 import Layout from "@/containers/Layout";
-import Link from "next/link";
+import YouTube from "react-youtube";
 
 export default function Home({ postsData, categories }) {
 	return (
 		<Layout>
-			<p>Home page</p>
+			<YouTube
+				videoId="_w0Ikk4JY7U"
+				iframeClassName="rounded-lg overflow-hidden w-full h-full"
+				className="h-full"
+			/>
 		</Layout>
 	);
 }

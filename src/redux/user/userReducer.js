@@ -5,6 +5,7 @@ import {
 	SIGNUP_USER_REQUEST,
 	SIGNUP_USER_SUCCESS,
 	SIGNUP_USER_FAILURE,
+	CLEAR_FORM_ERROR,
 } from "./userTypes";
 
 export const userLoginReducer = (state = {}, action) => {
@@ -23,6 +24,12 @@ export const userLoginReducer = (state = {}, action) => {
 				loading: false,
 				error: action.payload,
 			};
+		case CLEAR_FORM_ERROR: {
+			return {
+				...state,
+				error: null,
+			};
+		}
 
 		default:
 			return state;
@@ -45,6 +52,12 @@ export const userSignupReducer = (state = {}, action) => {
 				loading: false,
 				error: action.payload,
 			};
+		case CLEAR_FORM_ERROR: {
+			return {
+				...state,
+				error: null,
+			};
+		}
 
 		default:
 			return state;

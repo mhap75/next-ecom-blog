@@ -3,8 +3,10 @@ import { NextUIProvider, createTheme } from "@nextui-org/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import ProgressBar from "@badrap/bar-of-progress";
 import Router from "next/router";
-import AuthProvider from "@/context/AuthContext";
 import { wrapper } from "@/redux/store";
+import { useEffect } from "react";
+import { persistUser } from "@/redux/user/userActions";
+import { Provider, useStore } from "react-redux";
 
 const lightTheme = createTheme({
 	type: "light",
@@ -25,10 +27,16 @@ Router.events.on("routeChangeStart", progress.start);
 Router.events.on("routeChangeComplete", progress.finish);
 Router.events.on("routeChangeError", progress.finish);
 
-function App({ Component, pageProps }) {
-	// 2. Use at the root of your app
+function App({ Component, ...rest }) {
+	const {store, props} = wrapper.useWrappedStore(rest);
+
+	useEffect(() => {
+		persistUser(store);
+	}, []);
+
 	return (
-		<AuthProvider>
+		// <AuthProvider>
+		<Provider store={store}>
 			<NextThemesProvider
 				defaultTheme="system"
 				attribute="class"
@@ -38,10 +46,11 @@ function App({ Component, pageProps }) {
 				}}
 			>
 				<NextUIProvider>
-					<Component {...pageProps} />
+					<Component {...props.pageProps} />
 				</NextUIProvider>
 			</NextThemesProvider>
-		</AuthProvider>
+		</Provider>
+		// </AuthProvider>
 	);
 }
 

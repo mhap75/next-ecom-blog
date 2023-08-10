@@ -1,4 +1,4 @@
-import { useAuth, useAuthActions } from "@/context/AuthContext";
+import { clearFormError, loginUsers } from "@/redux/user/userActions";
 import {
 	Button,
 	Card,
@@ -7,39 +7,22 @@ import {
 	useTheme,
 	Loading,
 } from "@nextui-org/react";
-// import axios from "axios";
 import { useFormik } from "formik";
 import Link from "next/link";
 import { useEffect } from "react";
-// import { useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 
 const Signin = () => {
 	const { isDark } = useTheme();
-	const dispatch = useAuthActions();
-	const {user, loading, error} = useAuth();
+	const { user, loading, error } = useSelector(state => state.userLogin)
+	const dispatch = useDispatch()
 
 	const onSubmit = (values, { resetForm }) => {
 		const { password, emailOrPhone: email } = values;
-		dispatch({ type: "LOGIN", payload: { email, password } });
-
-		// try {
-		// 	const { data } = await axios.post(
-		// 		"http://localhost:5000/api/user/signin",
-		// 		{ email, password },
-		// 		{ withCredentials: true }
-		// 	);
-		// 	toast.success("Logged in successfully");
-		// 	console.log(data);
-		// 	resetForm();
-		// 	setError("")
-		// 	setLoading(false);
-		// } catch (error) {
-		// 	setError(error.response.data.message)
-		// 	toast.error(error.response.data.message);
-		// 	setLoading(false);
-		// }
+		const data = {password, email}
+		dispatch(loginUsers(data));
 	};
 
 	const validationSchema = Yup.object().shape({
@@ -84,7 +67,7 @@ const Signin = () => {
 	};
 
 	useEffect(() => {
-		dispatch({ type: "CLEAR_ERROR" });
+		dispatch(clearFormError())
 	}, []);
 
 	return (

@@ -1,4 +1,4 @@
-import { useAuth, useAuthActions } from "@/context/AuthContext";
+import { clearFormError, signupUsers } from "@/redux/user/userActions";
 import {
 	Button,
 	Card,
@@ -11,21 +11,19 @@ import { useFormik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { Toaster, toast } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 
 const Signup = () => {
 	const { isDark } = useTheme();
-	const { user, loading, error } = useAuth();
-	const dispatch = useAuthActions();
+	const { user, loading, error } = useSelector((state) => state.userSignup);
+	const dispatch = useDispatch();
 	const router = useRouter();
 
 	const onSubmit = (values) => {
-		const { password, email, name, phone } = values;
-		dispatch({
-			type: "SIGNUP",
-			payload: { password, email, name, phoneNumber: phone },
-		});
+		const { password, email, name, phone: phoneNumber } = values;
+		const data = { password, email, name, phoneNumber };
+		dispatch(signupUsers(data));
 	};
 
 	const validationSchema = Yup.object().shape({
@@ -84,7 +82,7 @@ const Signup = () => {
 	};
 
 	useEffect(() => {
-		dispatch({ type: "CLEAR_ERROR" });
+		dispatch(clearFormError())
 	}, []);
 
 	useEffect(() => {

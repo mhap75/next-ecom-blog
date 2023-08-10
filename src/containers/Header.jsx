@@ -7,15 +7,16 @@ import SunIcon from "@/components/common/icons/SunIcon";
 import MoonIcon from "@/components/common/icons/MoonIcon";
 import { useTheme as useNextTheme } from "next-themes";
 import { useRouter } from "next/router";
-import { useAuth, useAuthActions } from "@/context/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { signout } from "@/redux/user/userActions";
 
 const Header = () => {
 	const { setTheme } = useNextTheme();
 	const { isDark } = useTheme();
 	const { pathname } = useRouter();
 	const router = useRouter();
-	const { user, loading, error } = useAuth();
-	const dispatch = useAuthActions();
+	const { user } = useSelector((state) => state.userLogin);
+	const dispatch = useDispatch();
 
 	const navItems = [
 		{ title: "Home", path: "/" },
@@ -108,7 +109,7 @@ const Header = () => {
 								color="primary"
 								onAction={(actionKey) => {
 									if (actionKey === "logout") {
-										dispatch({ type: "LOGOUT" });
+										dispatch(signout());
 										setTimeout(() => router.reload(), 1000);
 									}
 								}}

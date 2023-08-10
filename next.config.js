@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['static.vecteezy.com'],
+    domains: ['static.vecteezy.com', "www.datocms-assets.com", "www.nasa.gov"],
   },
 }
 

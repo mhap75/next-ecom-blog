@@ -13,24 +13,12 @@ import http from "@/services/http";
 import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
 import routerPush from "@/utils/routerPush";
+import Image from "next/image";
+import { NextSeo } from "next-seo";
 
 const Post = ({ data }) => {
 	const { isDark } = useTheme();
 	const date = new Date(data.createdAt);
-	const monthNames = [
-		"January",
-		"February",
-		"March",
-		"April",
-		"May",
-		"June",
-		"July",
-		"August",
-		"September",
-		"October",
-		"November",
-		"December",
-	];
 	const [isCopying, setIsCopying] = useState(false);
 	const router = useRouter();
 
@@ -63,15 +51,9 @@ const Post = ({ data }) => {
 		setTimeout(() => setIsCopying(false), 1500);
 	};
 
-	const formattedDate =
-		monthNames[date.getUTCMonth()] + " " + date.getUTCFullYear();
-	console.log(data);
 	return (
 		<Layout>
-			<Head>
-				<title>{data.title}</title>
-				<meta name="description" content={data.briefText} />
-			</Head>
+			<NextSeo title={data.title} description={data.briefText} />
 			<article
 				className={`${
 					isDark
@@ -80,10 +62,15 @@ const Post = ({ data }) => {
 				} lg:prose-lg mx-auto prose prose-img:rounded-xl`}
 			>
 				<h1>{data.title}</h1>
-				<img
+				<Image
 					src={data.coverImage}
 					alt={data.title}
-					className="max-h-[400px] w-full"
+					width={1920}
+					height={1080}
+					// layout="responsive"
+					className="rounded-xl"
+					placeholder="blur"
+					blurDataURL={data.coverImage}
 				/>
 				<div className="flex justify-between">
 					<div className="text-sm mb-4 flex flex-col gap-2">
@@ -93,7 +80,12 @@ const Post = ({ data }) => {
 								src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
 								zoomed
 							/>
-							{data.author.name} | {formattedDate}
+							{data.author.name} |{" "}
+							{new Intl.DateTimeFormat("en-US", {
+								year: "numeric",
+								month: "long",
+								day: "numeric",
+							}).format(date)}
 						</div>
 						<Link
 							href={`/blogs/${data.category.title}`}
@@ -141,9 +133,7 @@ const Post = ({ data }) => {
 											<BiBookmarks />
 										)
 									}
-									onClick={() =>
-											handleBookmark(data._id)
-										}
+									onClick={() => handleBookmark(data._id)}
 								/>
 							</Button.Group>
 						</IconContext.Provider>
